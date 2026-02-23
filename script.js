@@ -68,6 +68,9 @@ function checkWinner() {
         ) {
             statusText.textContent = `Player ${gameState[a]} Wins! 🎉`;
             gameActive = false;
+
+            highlightWinner(condition);
+
             return true;
         }
     }
@@ -81,6 +84,11 @@ function checkWinner() {
     return false;
 }
 
+function highlightWinner(combo) {
+    combo.forEach(index => {
+        cells[index].classList.add("winner");
+    });
+}
 
 // AI MOVE (Random)
 function computerMove() {
@@ -108,7 +116,11 @@ function restartGame() {
     currentPlayer = "X";
     gameActive = true;
     statusText.textContent = "";
-    cells.forEach(cell => cell.textContent = "");
+
+    cells.forEach(cell => {
+        cell.textContent = "";
+        cell.classList.remove("winner"); 
+    });
 }
 
 // EVENT LISTENERS
