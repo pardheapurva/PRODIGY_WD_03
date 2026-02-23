@@ -12,6 +12,18 @@ const gameSection = document.querySelector(".game-section");
 const cells = document.querySelectorAll(".cell");
 const statusText = document.getElementById("status");
 
+const clickSound = document.getElementById("clickSound");
+const winSound = document.getElementById("winSound");
+
+function playClickSound() {
+    clickSound.currentTime = 0;
+    clickSound.play().catch(() => {});
+}
+
+function playWinSound() {
+    winSound.currentTime = 0;
+    winSound.play().catch(() => {});
+}
 // ===== GAME STATE =====
 let vsAI = false;
 let currentPlayer = "X";
@@ -75,6 +87,12 @@ homeBtn.addEventListener("click", () => {
 
 cells.forEach(cell => cell.addEventListener("click", handleCellClick));
 
+
+
+document.querySelectorAll("button").forEach(button => {
+    button.addEventListener("click", playClickSound);
+});
+
 function handleCellClick(e) {
     const index = e.target.dataset.index;
 
@@ -82,6 +100,8 @@ function handleCellClick(e) {
 
     gameState[index] = currentPlayer;
     e.target.textContent = currentPlayer;
+
+    playClickSound();
 
     if (checkWinner()) return;
 
@@ -91,7 +111,31 @@ function handleCellClick(e) {
         setTimeout(computerMove, 400);
     } else {
         currentPlayer = currentPlayer === "X" ? "O" : "X";
-    }
+    } 
+}
+
+function launchConfetti() {
+    const duration = 1500;
+    const end = Date.now() + duration;
+
+    (function frame() {
+        confetti({
+            particleCount: 5,
+            angle: 60,
+            spread: 55,
+            origin: { x: 0 }
+        });
+        confetti({
+            particleCount: 5,
+            angle: 120,
+            spread: 55,
+            origin: { x: 1 }
+        });
+
+        if (Date.now() < end) {
+            requestAnimationFrame(frame);
+        }
+    })();
 }
 
 function checkWinner() {
@@ -104,6 +148,8 @@ function checkWinner() {
             gameState[a] === gameState[c]
         ) {
             highlightWinner(condition);
+            playWinSound();
+            launchConfetti();
             statusText.textContent = `Player ${gameState[a]} Wins! 🎉`;
             gameActive = false;
             return true;
@@ -157,7 +203,7 @@ function restartGame() {
 
     statusText.textContent = vsAI 
         ? "VS Computer 🤖" 
-        : "2 Player 👥";
+        : "2 Players 👥";
 
     cells.forEach(cell => {
         cell.textContent = "";
@@ -166,3 +212,4 @@ function restartGame() {
 }
 
 restartBtn.addEventListener("click", restartGame);
+
