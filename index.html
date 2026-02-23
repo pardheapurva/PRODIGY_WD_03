@@ -7,28 +7,43 @@
 </head>
 <body>
 
-    <div class="container">
-      <h1>Tic Tac Toe</h1>
+<div class="container">
 
-      <div class="mode-select">
-        <button id="twoPlayerBtn">2 Player</button>
-        <button id="aiBtn">Play vs AI</button>
-      </div>
+    <h1>Tic Tac Toe</h1>
+    <p class="subtitle">Every move counts. Are you ready?</p>
 
-      <div class="board">
-        <div class="cell" data-index="0"></div>
-        <div class="cell" data-index="1"></div>
-        <div class="cell" data-index="2"></div>
-        <div class="cell" data-index="3"></div>
-        <div class="cell" data-index="4"></div>
-        <div class="cell" data-index="5"></div>
-        <div class="cell" data-index="6"></div>
-        <div class="cell" data-index="7"></div>
-        <div class="cell" data-index="8"></div>
-      </div>
+    <!-- START SCREEN -->
+    <div class="start-section">
+        <button id="beginBtn" class="primary-btn">Let's Begin</button>
+    </div>
 
-    <p id="status"></p>
-    <button id="restart">Restart Game</button>
+    <!-- MODE SELECTION -->
+    <div class="mode-section hidden">
+        <h3>Select Mode</h3>
+        <button id="twoPlayerBtn">2 Player 👥</button>
+        <button id="aiBtn">VS Computer 🤖</button>
+    </div>
+
+    <!-- GAME SECTION -->
+    <div class="game-section hidden">
+        <div class="board">
+            <div class="cell" data-index="0"></div>
+            <div class="cell" data-index="1"></div>
+            <div class="cell" data-index="2"></div>
+            <div class="cell" data-index="3"></div>
+            <div class="cell" data-index="4"></div>
+            <div class="cell" data-index="5"></div>
+            <div class="cell" data-index="6"></div>
+            <div class="cell" data-index="7"></div>
+            <div class="cell" data-index="8"></div>
+        </div>
+
+        <p id="status"></p>
+
+        <button id="restart">Restart Game</button>
+        <button id="homeBtn">Home</button>
+    </div>
+
 </div>
 
 <script src="script.js"></script>

@@ -1,41 +1,80 @@
-const cells = document.querySelectorAll(".cell");
-const statusText = document.getElementById("status");
-const restartBtn = document.getElementById("restart");
+// ===== ELEMENTS =====
+const beginBtn = document.getElementById("beginBtn");
 const twoPlayerBtn = document.getElementById("twoPlayerBtn");
 const aiBtn = document.getElementById("aiBtn");
+const restartBtn = document.getElementById("restart");
+const homeBtn = document.getElementById("homeBtn");   
 
+const startSection = document.querySelector(".start-section");
+const modeSection = document.querySelector(".mode-section");
+const gameSection = document.querySelector(".game-section");
+
+const cells = document.querySelectorAll(".cell");
+const statusText = document.getElementById("status");
+
+// ===== GAME STATE =====
 let vsAI = false;
 let currentPlayer = "X";
-let gameActive = true;
+let gameActive = false;
 let gameState = ["", "", "", "", "", "", "", "", ""];
 
 const winningConditions = [
-    [0,1,2],
-    [3,4,5],
-    [6,7,8],
-    [0,3,6],
-    [1,4,7],
-    [2,5,8],
-    [0,4,8],
-    [2,4,6]
+    [0,1,2],[3,4,5],[6,7,8],
+    [0,3,6],[1,4,7],[2,5,8],
+    [0,4,8],[2,4,6]
 ];
 
 
-// MODE SELECTION
+// START FLOW
+
+// Begin → Show Mode Selection
+beginBtn.addEventListener("click", () => {
+    startSection.classList.add("hidden");
+    modeSection.classList.remove("hidden");
+});
+
+// Mode Selection
 twoPlayerBtn.addEventListener("click", () => {
     vsAI = false;
-    restartGame();
-    statusText.textContent = "2 Player Mode";
+    startGame();
 });
 
 aiBtn.addEventListener("click", () => {
     vsAI = true;
+    startGame();
+});
+
+// Start Game → Hide Mode → Show Board
+function startGame() {
+    modeSection.classList.add("hidden");
+    gameSection.classList.remove("hidden");
     restartGame();
-    statusText.textContent = "Playing vs AI 🤖";
+}
+
+
+//  HOME BUTTON 
+
+
+homeBtn.addEventListener("click", () => {
+    // Reset everything
+    restartGame();
+
+    // Hide game + mode
+    gameSection.classList.add("hidden");
+    modeSection.classList.add("hidden");
+
+    // Show start screen
+    startSection.classList.remove("hidden");
+
+    // Reset mode
+    vsAI = false;
 });
 
 
-//  HANDLE PLAYER CLICK
+// GAME LOGIC
+
+cells.forEach(cell => cell.addEventListener("click", handleCellClick));
+
 function handleCellClick(e) {
     const index = e.target.dataset.index;
 
@@ -46,17 +85,15 @@ function handleCellClick(e) {
 
     if (checkWinner()) return;
 
-    // If AI mode and Player X just played
+    // AI Turn
     if (vsAI && currentPlayer === "X") {
         currentPlayer = "O";
-        setTimeout(computerMove, 500);
+        setTimeout(computerMove, 400);
     } else {
         currentPlayer = currentPlayer === "X" ? "O" : "X";
     }
 }
 
-
-// CHECK WINNER
 function checkWinner() {
     for (let condition of winningConditions) {
         const [a, b, c] = condition;
@@ -66,11 +103,9 @@ function checkWinner() {
             gameState[a] === gameState[b] &&
             gameState[a] === gameState[c]
         ) {
+            highlightWinner(condition);
             statusText.textContent = `Player ${gameState[a]} Wins! 🎉`;
             gameActive = false;
-
-            highlightWinner(condition);
-
             return true;
         }
     }
@@ -90,7 +125,9 @@ function highlightWinner(combo) {
     });
 }
 
-// AI MOVE (Random)
+
+//  AI 
+
 function computerMove() {
     if (!gameActive) return;
 
@@ -110,19 +147,22 @@ function computerMove() {
     currentPlayer = "X";
 }
 
-// RESTART GAME
+
+// RESTART
+
 function restartGame() {
     gameState = ["", "", "", "", "", "", "", "", ""];
     currentPlayer = "X";
     gameActive = true;
-    statusText.textContent = "";
+
+    statusText.textContent = vsAI 
+        ? "VS Computer 🤖" 
+        : "2 Player 👥";
 
     cells.forEach(cell => {
         cell.textContent = "";
-        cell.classList.remove("winner"); 
+        cell.classList.remove("winner");
     });
 }
 
-// EVENT LISTENERS
-cells.forEach(cell => cell.addEventListener("click", handleCellClick));
 restartBtn.addEventListener("click", restartGame);
