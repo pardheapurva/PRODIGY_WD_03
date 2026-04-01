@@ -56,7 +56,7 @@ aiBtn.addEventListener("click", () => {
     startGame();
 });
 
-// Start Game → Hide Mode → Show Board
+// Start Game → Hide Mode -Show Board
 function startGame() {
     modeSection.classList.add("hidden");
     gameSection.classList.remove("hidden");
@@ -150,7 +150,7 @@ function checkWinner() {
             highlightWinner(condition);
             playWinSound();
             launchConfetti();
-            statusText.textContent = `Player ${gameState[a]} Wins! 🎉`;
+            statusText.textContent = `Player ${gameState[a]} Wins!`;
             gameActive = false;
             return true;
         }
@@ -202,8 +202,8 @@ function restartGame() {
     gameActive = true;
 
     statusText.textContent = vsAI 
-        ? "VS Computer 🤖" 
-        : "2 Players 👥";
+        ? "VS Computer" 
+        : "2 Players";
 
     cells.forEach(cell => {
         cell.textContent = "";
